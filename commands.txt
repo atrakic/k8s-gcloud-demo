@@ -1,0 +1,24 @@
+docker pull gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:f61c4839cbfff1ba7d832bc698f3d9b7fe1bce85
+
+kubectl run k8s --image gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:f61c4839cbfff1ba7d832bc698f3d9b7fe1bce85
+# kubectl run k8s-2 --image=gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:f61c4839cbfff1ba7d832bc698f3d9b7fe1bce85
+
+k describe deploy k8s
+k describe pods k8s
+
+# PODNAME=$(kubectl get pods --output=jsonpath={.items..metadata.name} | xargs) 
+
+k exec -it $PODNAME bash
+kubectl port-forward k8s-6857b5c484-qvfs2 9000
+# ctrl ^C
+k delete deploy k8s
+
+# Port forward and externalise to outside:
+k run k8s-2 --image=gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:f61c4839cbfff1ba7d832bc698f3d9b7fe1bce85 --port=9000
+k expose deploy/k8s-2 --type=LoadBalancer --port=9000
+
+k get service
+#NAME         TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
+#k8s-2        LoadBalancer   10.39.246.18   35.247.80.15   9000:32010/TCP   7m
+#kubernetes   ClusterIP      10.39.240.1    <none>         443/TCP          53m
+
