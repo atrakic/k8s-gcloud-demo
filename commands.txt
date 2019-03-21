@@ -22,3 +22,33 @@ k get service
 #k8s-2        LoadBalancer   10.39.246.18   35.247.80.15   9000:32010/TCP   7m
 #kubernetes   ClusterIP      10.39.240.1    <none>         443/TCP          53m
 
+k delete service k8s-2
+k get deploy -o yaml
+
+k get deploy -o=yaml --export > deployment.yaml
+kubectl apply -f deployment.yaml
+k get deploy
+
+kubectl apply -f deployment.yaml
+#deployment.extensions/k8s-demo unchanged
+# service/k8s-demo unchanged
+
+## Deploy and expose ## 
+
+echo "---" >> deployment.yaml
+k expose deployment k8s-demo --type=ClusterIP --name=k8s-demo
+k get deployments k8s-demo -o=yaml --export ## export
+
+k get service
+#NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+#k8s-demo     LoadBalancer   10.39.253.84   <pending>     9000:32666/TCP   22s
+#kubernetes   ClusterIP      10.39.240.1    <none>        443/TCP          1h
+
+k get services
+#NAME         TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)          AGE
+#k8s-demo     LoadBalancer   10.39.253.84   35.247.80.15   9000:32666/TCP   1m
+#kubernetes   ClusterIP      10.39.240.1    <none>         443/TCP          1h
+
+
+## Secrets 
+k get secret
