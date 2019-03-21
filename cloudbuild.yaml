@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:$COMMIT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/balmy-platform-526/github.com/atrakic/k8s-gcloud-demo:$COMMIT_SHA']
